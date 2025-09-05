@@ -144,8 +144,14 @@ class _SSHHomePageState extends State<SSHHomePage> with TickerProviderStateMixin
           bottom: TabBar(
             isScrollable: true,
             tabs: [
-              ...tabs,
-              Tab(icon: Icon(Icons.add)),
+              ...tabs.map((tab) => SizedBox(
+                width: 120,
+                child: tab,
+              )),
+              SizedBox(
+                width: 60,
+                child: Tab(icon: Icon(Icons.add)),
+              ),
             ],
             onTap: (index) {
               if (index == tabs.length) _addNewTab();
@@ -155,6 +161,8 @@ class _SSHHomePageState extends State<SSHHomePage> with TickerProviderStateMixin
               color: Theme.of(context).colorScheme.primaryContainer,
             ),
             dividerColor: Colors.transparent,
+            labelPadding: EdgeInsets.symmetric(horizontal: 8),
+            tabAlignment: TabAlignment.start,
           ),
         ),
         body: TabBarView(
