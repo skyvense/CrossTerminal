@@ -222,6 +222,28 @@ class _SSHTabState extends State<SSHTab> {
         }
       };
 
+      // 处理终端尺寸变化
+      terminal.onResize = (width, height, pixelWidth, pixelHeight) {
+        try {
+          // 通知SSH服务器调整远程终端尺寸
+          channel?.resizeTerminal(width, height, pixelWidth, pixelHeight);
+        } catch (e) {
+          terminal.write('\r\n调整终端尺寸失败: $e\r\n');
+        }
+      };
+
+      // 初始化时设置终端尺寸
+      try {
+        channel?.resizeTerminal(
+          terminal.viewWidth, 
+          terminal.viewHeight, 
+          terminal.viewWidth * 8, // 估算像素宽度
+          terminal.viewHeight * 16 // 估算像素高度
+        );
+      } catch (e) {
+        terminal.write('\r\n设置初始终端尺寸失败: $e\r\n');
+      }
+
       setState(() {
         connecting = false;
         retryCount = 0; // 重置重试计数
